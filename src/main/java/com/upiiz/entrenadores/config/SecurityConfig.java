@@ -57,7 +57,17 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        // Liberar COMPLETAMENTE Swagger y Autenticación
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
+                        // Rutas protegidas
                         .requestMatchers(HttpMethod.GET, "/api/entrenadores/**").hasAnyRole("ADMIN", "CONSULTA")
                         .requestMatchers(HttpMethod.POST, "/api/entrenadores/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/entrenadores/**").hasRole("ADMIN")
